@@ -5,6 +5,7 @@ import java.util.concurrent.Executors;
 
 public class App {
     public static void main(String[] args) {
+        // this is the multithreading book crossing app
 
         Student[] students = null;
         Book[] books = null;
