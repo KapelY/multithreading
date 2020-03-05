@@ -1,5 +1,7 @@
 package mergeSort;
 
+import java.util.Arrays;
+
 public class MergeSort {
 
     private int[] nums;
@@ -8,6 +10,34 @@ public class MergeSort {
     public MergeSort(int[] nums) {
         this.nums = nums;
         tempArray = new int[nums.length];
+    }
+
+    public Thread mergeSortThread(int low, int high, int numOfThreads) {
+        return new Thread(() -> parallelMergeSort(low, high, numOfThreads / 2));
+    }
+
+    public void parallelMergeSort(int low, int high, int numOfThreads) {
+        if (numOfThreads <= 1) {
+            mergeSort(low, high);
+            return;
+        }
+
+        int middleIndex = (low + high) / 2;
+
+        Thread leftSorter = mergeSortThread(low, middleIndex, numOfThreads);
+        Thread rightSorter = mergeSortThread(middleIndex+1, high, numOfThreads);
+
+        leftSorter.start();
+        rightSorter.start();
+
+        try {
+            leftSorter.join();
+            rightSorter.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        merge(low, middleIndex, high);
     }
 
     public void mergeSort(int low, int high) {
@@ -54,20 +84,7 @@ public class MergeSort {
         }
     }
 
-    public boolean isSorted() {
-        for (int i = 0; i < nums.length - 1; i++) {
-
-            if (nums[i] > nums[i + 1]) {
-                return false;
-            }
-        }
-        return true;
-    }
-
     public void showResult() {
-        System.out.println();
-        for (int num : nums) {
-            System.out.print(num + " ");
-        }
+        System.out.println(Arrays.toString(nums));
     }
 }
