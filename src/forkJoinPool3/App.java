@@ -28,6 +28,6 @@ public class App {
     }
 
     private static int[] initNums() {
-        return new Random().ints(32, 3, 100).toArray();
+        return new Random().ints(3, 50, 100).toArray();
     }
 }
